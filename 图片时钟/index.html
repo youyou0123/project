@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+<style>
+*{
+    margin: 0;
+    padding:0;
+    list-style: none;
+}
+li{
+    float: left;
+}
+ul{
+    position: relative;
+    width:400px;
+    margin: 100px auto;
+    overflow: hidden;
+}
+li{
+    width:45px;
+    height: 61px;
+    /* overflow: hidden; */
+    position: relative;
+    top:0;
+    transition:500ms;
+}
+.dian{
+    margin-left:10px;
+}
+</style>
+</head>
+<body>
+    <ul id="ul">
+        <li>
+            <img src="img/0.png">
+            <img src="img/0.png">
+        </li>
+        <li>
+            <img src="img/0.png">
+            <img src="img/0.png">
+        </li>
+        <li>
+            <img class="dian" src="img/second1.png">  
+        </li>
+        <li>
+            <img src="img/0.png">
+            <img src="img/0.png">
+        </li>
+        <li>
+            <img src="img/0.png">
+            <img src="img/0.png">
+        </li>
+        <li>
+            <img class="dian" src="img/second1.png">  
+        </li>
+        <li>
+            <img src="img/0.png">
+            <img src="img/0.png">
+        </li>
+        <li>
+            <img src="img/0.png">
+            <img src="img/0.png">
+        </li>
+    </ul>
+    <!-- 
+        思路
+            1.控制每个li中的图片切换
+            2.获取时间，把时间和图片对应起来
+            3.将函数封装，供所有li使用
+
+
+     -->
+<script>
+    //获取元素
+    const ul = document.getElementById('ul');
+    const li = ul.getElementsByTagName('li');
+    let oldTime = '00:00:00';
+
+
+    //把时间对应成图片
+   for(let i = 0; i < li.length; i++){
+       if(i!=2 && i!=5){
+           li[i].getElementsByTagName('img')[0].src = 'img/'+oldTime[i]+'.png';
+       }
+   }
+    //获取时间，每秒更新
+    let timer = setInterval(function(){
+        //获取最新时间
+        let date = new Date;
+        let H = date.getHours();
+        let M = date.getMinutes();
+        let S = date.getSeconds();
+        //组合时间
+        let str = tDou(H) + ':' + tDou(M) + ':'+ tDou(S);
+        //循环所有图片
+        for(let i = 0; i < str.length; i++){
+            //判断冒号位置
+            if(i!=2 && i!=5){
+                //设置判断   只允许不一的时间切换，一样的不动
+                if(str[i] != oldTime[i]){
+                    //调用图片切换函数  传参
+                    move(li[i],str[i]);
+                }
+            }
+        }
+        //将真实时间赋值给时间格式
+        oldTime = str;
+
+    },1000)
+
+    //个位补零
+    function tDou(n){ return n < 10?'0' + n:''+n};
+
+    
+    //控制图片切换
+    function move(li,num){
+        //获取图片
+        const img = li.getElementsByTagName('img');
+        //设置图片动态地址
+        img[1].src = "img/"+num+'.png';
+        //设置图片切换的过渡时间
+        li.style.transition = '500ms'
+        //设置切换后的顶端高度
+        li.style.top = '-61px';
+        //设置定时器处理图片换位问题  每500毫秒将图片拉回并切换
+        setTimeout(function(){
+            //
+            li.style.transition = 'none';
+            //微调
+            li.style.top = '4px';
+            //设置图片动态地址
+            img[0].src = "img/"+num+'.png';
+        },510);
+        
+    }
+
+
+</script>
+</body>
+</html>
